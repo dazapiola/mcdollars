@@ -6,6 +6,8 @@ import { healthRouter } from './routes/health.js'
 import { metricsRouter } from './routes/metrics.js'
 import { queueRouter } from './routes/queue.js'
 import { cacheRouter } from './routes/cache.js'
+import { rateLimitRouter } from './routes/rate-limit.js'
+import { circuitBreakerRouter } from './routes/circuit-breaker.js'
 import './queues/orders.queue.js'
 
 const app = express()
@@ -20,6 +22,8 @@ app.use('/api/orders', orderRouter)
 app.use('/api/metrics', metricsRouter)
 app.use('/api/queue', queueRouter)
 app.use('/api/cache', cacheRouter)
+app.use('/api/rate-limit', rateLimitRouter)
+app.use('/api/circuit-breaker', circuitBreakerRouter)
 
 app.listen(PORT, () => {
   console.log(`McDollars API running on http://localhost:${PORT}`)

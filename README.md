@@ -114,11 +114,11 @@ Cada módulo es una página funcional de la app que además explica un concepto 
 |---|--------|----------|--------|
 | 1 | Kubernetes & Autoscaling | Más clientes → más cajeros automáticos | Disponible |
 | 2 | SOLID Principles | Cada empleado tiene un rol bien definido | Disponible |
-| 3 | Microservicios vs Monolito | Un cocinero vs equipos especializados | Próximamente |
+| 3 | Microservicios vs Monolito | Un cocinero vs equipos especializados | Disponible |
 | 4 | Message Queue (BullMQ) | El papel del pedido que va a la cocina | Disponible |
 | 5 | Caching con Redis | Hamburguesas pre-cocinadas bajo la lámpara | Disponible |
-| 6 | Rate Limiting | Un pedido por persona en hora pico | Próximamente |
-| 7 | Circuit Breaker | La parrilla se rompe, se sirven wraps | Próximamente |
+| 6 | Rate Limiting | Un pedido por persona en hora pico | Disponible |
+| 7 | Circuit Breaker | La parrilla se rompe, se sirven wraps | Disponible |
 | 8 | REST API Design | El menú es la API | Disponible |
 | 9 | CI/CD Pipeline | Lanzar una nueva burger con control de calidad | Próximamente |
 | 10 | CAP Theorem | La franquicia sin conexión al depósito | Próximamente |
@@ -149,5 +149,6 @@ kubectl get hpa -w
 
 - **Fase 1** ✅ — Base: monorepo, CRUD, dashboard, Docker
 - **Fase 2** ✅ — Módulos core: Kubernetes, SOLID, Message Queue, Redis cache
+- **Fase 3** ✅ — Módulos avanzados: Microservicios, Rate Limiting, Circuit Breaker
 - **Fase 3** — Módulos avanzados: Microservicios, Circuit Breaker, Rate Limiting
 - **Fase 4** — Polish: CI/CD, CAP Theorem, animaciones, docs inline

@@ -44,8 +44,9 @@ const modules: Module[] = [
     description:
       'Monolito: un solo proceso maneja pedidos, cocina, pagos y delivery. Microservicios: cada área es un servicio independiente que puede escalar por separado.',
     tags: ['arquitectura', 'backend', 'escalabilidad'],
-    status: 'coming-soon',
+    status: 'available',
     icon: '🔧',
+    path: '/modules/microservices',
   },
   {
     id: 'message-queue',
@@ -76,8 +77,9 @@ const modules: Module[] = [
     description:
       'En hora pico, la caja acepta solo N pedidos por minuto. Si mandás demasiados, recibís un 429 Too Many Requests.',
     tags: ['backend', 'seguridad', 'performance'],
-    status: 'coming-soon',
+    status: 'available',
     icon: '🚦',
+    path: '/modules/rate-limit',
   },
   {
     id: 'circuit-breaker',
@@ -86,8 +88,9 @@ const modules: Module[] = [
     description:
       'Si la parrilla falla, el sistema automáticamente ofrece wraps en vez de dar error. Cuando se repara, vuelve gradualmente al menú normal.',
     tags: ['backend', 'resiliencia', 'patrones'],
-    status: 'coming-soon',
+    status: 'available',
     icon: '🔌',
+    path: '/modules/circuit-breaker',
   },
   {
     id: 'rest-api',

@@ -7,6 +7,9 @@ import { KubernetesPage } from './pages/modules/KubernetesPage'
 import { SolidPage } from './pages/modules/SolidPage'
 import { QueuePage } from './pages/modules/QueuePage'
 import { CachingPage } from './pages/modules/CachingPage'
+import { RateLimitPage } from './pages/modules/RateLimitPage'
+import { CircuitBreakerPage } from './pages/modules/CircuitBreakerPage'
+import { MicroservicesPage } from './pages/modules/MicroservicesPage'
 
 export default function App() {
   return (
@@ -19,6 +22,9 @@ export default function App() {
         <Route path="/modules/solid" element={<SolidPage />} />
         <Route path="/modules/queue" element={<QueuePage />} />
         <Route path="/modules/caching" element={<CachingPage />} />
+        <Route path="/modules/rate-limit" element={<RateLimitPage />} />
+        <Route path="/modules/circuit-breaker" element={<CircuitBreakerPage />} />
+        <Route path="/modules/microservices" element={<MicroservicesPage />} />
       </Route>
     </Routes>
   )
