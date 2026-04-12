@@ -14,10 +14,24 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   return res.json() as Promise<T>
 }
 
+interface ProductsResponse {
+  products: Product[]
+  cachedAt: string
+  ttl: number
+  _source: 'cache' | 'database'
+}
+
 export const api = {
   products: {
-    list: (category?: string) =>
-      request<Product[]>(`/products${category ? `?category=${category}` : ''}`),
+    list: async (category?: string): Promise<Product[]> => {
+      const res = await request<ProductsResponse | Product[]>(
+        `/products${category ? `?category=${category}` : ''}`
+      )
+      // Compatibilidad: si es array (sin cache) o wrapper con cache
+      return Array.isArray(res) ? res : res.products
+    },
+    listWithMeta: (category?: string) =>
+      request<ProductsResponse>(`/products${category ? `?category=${category}` : ''}`),
     get: (id: string) => request<Product>(`/products/${id}`),
   },
   orders: {

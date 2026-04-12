@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 
 type ModuleStatus = 'available' | 'coming-soon'
 
@@ -21,8 +22,9 @@ const modules: Module[] = [
     description:
       'Cuando la hamburguesería se llena, el sistema levanta nuevos "cajeros" (pods) automáticamente. Cuando se vacía, los baja. Así funciona el Horizontal Pod Autoscaler.',
     tags: ['infraestructura', 'k8s', 'escalabilidad'],
-    status: 'coming-soon',
+    status: 'available',
     icon: '⚙️',
+    path: '/modules/kubernetes',
   },
   {
     id: 'solid',
@@ -31,8 +33,9 @@ const modules: Module[] = [
     description:
       'El cajero toma pedidos, el cocinero cocina, el repartidor entrega. Nadie hace todo. Así se diseña software mantenible.',
     tags: ['patrones', 'arquitectura', 'backend'],
-    status: 'coming-soon',
+    status: 'available',
     icon: '🏗️',
+    path: '/modules/solid',
   },
   {
     id: 'microservices',
@@ -51,8 +54,9 @@ const modules: Module[] = [
     description:
       'La caja imprime un ticket y lo manda a la cocina. La cocina lo procesa en orden. Si hay mucho trabajo, los tickets esperan sin perderse.',
     tags: ['backend', 'async', 'mensajería'],
-    status: 'coming-soon',
+    status: 'available',
     icon: '📋',
+    path: '/modules/queue',
   },
   {
     id: 'caching',
@@ -61,8 +65,9 @@ const modules: Module[] = [
     description:
       'Las hamburguesas más pedidas se preparan con anticipación. No hace falta cocinarlas desde cero cada vez. Si pasan 10 minutos, hay que renovarlas (TTL).',
     tags: ['backend', 'performance', 'redis'],
-    status: 'coming-soon',
+    status: 'available',
     icon: '⚡',
+    path: '/modules/caching',
   },
   {
     id: 'rate-limiting',
@@ -185,20 +190,25 @@ export function DashboardPage() {
 function ModuleCard({ module: mod, index }: { module: Module; index: number }) {
   const isAvailable = mod.status === 'available'
 
-  return (
+  const inner = (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.3 }}
-      className={`relative rounded-xl border p-5 flex flex-col gap-3 transition-all ${
+      className={`relative rounded-xl border p-5 flex flex-col gap-3 transition-all h-full ${
         isAvailable
-          ? 'border-brand-yellow/40 bg-brand-dark hover:border-brand-yellow cursor-pointer'
+          ? 'border-brand-yellow/40 bg-brand-dark hover:border-brand-yellow'
           : 'border-gray-800 bg-gray-900/50 opacity-70'
       }`}
     >
       {!isAvailable && (
         <span className="absolute top-3 right-3 text-xs font-medium text-gray-500 bg-gray-800 px-2 py-0.5 rounded-full">
           próximamente
+        </span>
+      )}
+      {isAvailable && (
+        <span className="absolute top-3 right-3 text-xs font-medium text-brand-yellow bg-brand-yellow/10 px-2 py-0.5 rounded-full">
+          ver módulo →
         </span>
       )}
 
@@ -226,4 +236,9 @@ function ModuleCard({ module: mod, index }: { module: Module; index: number }) {
       </div>
     </motion.div>
   )
+
+  if (isAvailable && mod.path) {
+    return <Link to={mod.path} className="block">{inner}</Link>
+  }
+  return inner
 }

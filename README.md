@@ -112,11 +112,11 @@ Cada módulo es una página funcional de la app que además explica un concepto 
 
 | # | Módulo | Analogía | Estado |
 |---|--------|----------|--------|
-| 1 | Kubernetes & Autoscaling | Más clientes → más cajeros automáticos | Próximamente |
-| 2 | SOLID Principles | Cada empleado tiene un rol bien definido | Próximamente |
+| 1 | Kubernetes & Autoscaling | Más clientes → más cajeros automáticos | Disponible |
+| 2 | SOLID Principles | Cada empleado tiene un rol bien definido | Disponible |
 | 3 | Microservicios vs Monolito | Un cocinero vs equipos especializados | Próximamente |
-| 4 | Message Queue | El papel del pedido que va a la cocina | Próximamente |
-| 5 | Caching con Redis | Hamburguesas pre-cocinadas bajo la lámpara | Próximamente |
+| 4 | Message Queue (BullMQ) | El papel del pedido que va a la cocina | Disponible |
+| 5 | Caching con Redis | Hamburguesas pre-cocinadas bajo la lámpara | Disponible |
 | 6 | Rate Limiting | Un pedido por persona en hora pico | Próximamente |
 | 7 | Circuit Breaker | La parrilla se rompe, se sirven wraps | Próximamente |
 | 8 | REST API Design | El menú es la API | Disponible |
@@ -147,7 +147,7 @@ kubectl get hpa -w
 
 ## Fases de desarrollo
 
-- **Fase 1** (actual) — Base: monorepo, CRUD, dashboard, Docker
-- **Fase 2** — Módulos core: Kubernetes, SOLID, Message Queue, Redis
+- **Fase 1** ✅ — Base: monorepo, CRUD, dashboard, Docker
+- **Fase 2** ✅ — Módulos core: Kubernetes, SOLID, Message Queue, Redis cache
 - **Fase 3** — Módulos avanzados: Microservicios, Circuit Breaker, Rate Limiting
 - **Fase 4** — Polish: CI/CD, CAP Theorem, animaciones, docs inline

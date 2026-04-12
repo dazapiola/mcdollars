@@ -1,12 +1,29 @@
 import { Router } from 'express'
 import { prisma } from '../lib/prisma.js'
+import { redis } from '../lib/redis.js'
+import { recordCacheHit, recordCacheMiss } from './cache.js'
 import { z } from 'zod'
 import { Category } from '@prisma/client'
 
 export const productRouter = Router()
 
+const PRODUCTS_TTL = 60 // segundos — "la hamburguesa bajo la lámpara no puede estar más de 1 minuto"
+
 productRouter.get('/', async (req, res) => {
   const { category } = req.query
+  const cacheKey = `cache:products:${category ?? 'all'}`
+
+  // Intentar leer desde caché
+  try {
+    const cached = await redis.get(cacheKey)
+    if (cached) {
+      await recordCacheHit()
+      return res.json({ ...JSON.parse(cached), _source: 'cache' })
+    }
+  } catch { /* Redis offline, continuar sin caché */ }
+
+  await recordCacheMiss()
+
   const products = await prisma.product.findMany({
     where: {
       available: true,
@@ -14,7 +31,15 @@ productRouter.get('/', async (req, res) => {
     },
     orderBy: { category: 'asc' },
   })
-  res.json(products)
+
+  const payload = { products, cachedAt: new Date().toISOString(), ttl: PRODUCTS_TTL }
+
+  // Guardar en caché con TTL
+  try {
+    await redis.setex(cacheKey, PRODUCTS_TTL, JSON.stringify(payload))
+  } catch { /* Redis offline */ }
+
+  res.json({ ...payload, _source: 'database' })
 })
 
 productRouter.get('/:id', async (req, res) => {

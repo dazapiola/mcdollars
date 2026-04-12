@@ -2,6 +2,8 @@ import { Router } from 'express'
 import { prisma } from '../lib/prisma.js'
 import { z } from 'zod'
 import { OrderStatus } from '@prisma/client'
+import { ordersQueue } from '../queues/orders.queue.js'
+import { broadcastQueueEvent } from './queue.js'
 
 export const orderRouter = Router()
 
@@ -66,6 +68,18 @@ orderRouter.post('/', async (req, res) => {
     },
     include: { items: { include: { product: true } } },
   })
+
+  // Encolar el pedido para procesamiento en cocina
+  try {
+    await ordersQueue.add(
+      'cook-order',
+      { orderId: order.id, itemCount: items.length },
+      { jobId: order.id }
+    )
+    broadcastQueueEvent('new-order', { orderId: order.id, itemCount: items.length })
+  } catch {
+    // Si Redis no está disponible, el pedido igual se crea
+  }
 
   res.status(201).json(order)
 })

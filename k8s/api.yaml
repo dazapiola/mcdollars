@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcdollars-api
+  namespace: mcdollars
+  labels:
+    app: mcdollars-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mcdollars-api
+  template:
+    metadata:
+      labels:
+        app: mcdollars-api
+    spec:
+      containers:
+        - name: api
+          image: mcdollars-api:latest
+          imagePullPolicy: Never          # Minikube local image
+          ports:
+            - containerPort: 3001
+          env:
+            - name: DATABASE_URL
+              value: postgresql://mcdollars:mcdollars@postgres:5432/mcdollars
+            - name: REDIS_URL
+              value: redis://redis:6379
+            - name: PORT
+              value: "3001"
+            - name: NODE_ENV
+              value: production
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 30
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcdollars-api
+  namespace: mcdollars
+spec:
+  selector:
+    app: mcdollars-api
+  ports:
+    - port: 3001
+      targetPort: 3001
+  type: ClusterIP
+---
+# Horizontal Pod Autoscaler
+# Escala entre 1 y 10 pods cuando la CPU supera el 50%
+# Analogía: cuando la hamburguesería se llena, abre más cajas automáticamente
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: mcdollars-api-hpa
+  namespace: mcdollars
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mcdollars-api
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 15      # Reacciona rápido al pico
+      policies:
+        - type: Pods
+          value: 2
+          periodSeconds: 15
+    scaleDown:
+      stabilizationWindowSeconds: 60      # Espera 1 min antes de bajar
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 30
