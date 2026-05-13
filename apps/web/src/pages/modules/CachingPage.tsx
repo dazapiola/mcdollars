@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { api } from '../../api/client'
 
 interface CacheStats {
   hits: number
@@ -122,7 +121,7 @@ export function CachingPage() {
       {
         id: ++reqCounter,
         time: new Date().toLocaleTimeString('es-AR'),
-        source: 'database',
+        source: 'database' as const,
         category: 'INVALIDATION',
         durationMs: 0,
       },
