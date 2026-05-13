@@ -13,7 +13,7 @@ export async function getCacheStats(): Promise<{ hits: number; misses: number; k
     return {
       hits: parseInt(raw.hits ?? '0', 10),
       misses: parseInt(raw.misses ?? '0', 10),
-      keys: keys.filter((k) => k !== STATS_KEY).length,
+      keys: keys.filter((k: string) => k !== STATS_KEY).length,
     }
   } catch {
     return { hits: 0, misses: 0, keys: 0 }

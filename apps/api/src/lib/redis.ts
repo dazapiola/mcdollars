@@ -1,4 +1,4 @@
-import Redis from 'ioredis'
+import { Redis } from 'ioredis'
 
 const REDIS_URL = process.env.REDIS_URL ?? 'redis://localhost:6379'
 
@@ -9,7 +9,7 @@ export const redis = new Redis(REDIS_URL, {
   enableReadyCheck: false,
 })
 
-redis.on('error', (err) => {
+redis.on('error', (err: Error) => {
   if (process.env.NODE_ENV !== 'test') {
     console.warn('[Redis] Connection error:', err.message)
   }
